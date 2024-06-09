@@ -35,9 +35,57 @@ document.onkeydown = function (e) {
     }
 }
 
+const geometry = new THREE.BoxGeometry( 1, 1, 1 ); 
+const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} ); 
+const cube = new THREE.Mesh( geometry, material ); 
+cube.position.set(10,0,0);
+scene.add( cube );
+
+
+function Collision(){
+    if(player.position.x > 5 || player.position < -5){
+        console.log("crash outside map");
+    } 
+            const otherBoundingBox = new THREE.Box3().setFromObject(cube)
+            const boundingBox = new THREE.Box3().setFromObject(player)
+            if(boundingBox.intersectsBox(otherBoundingBox)){
+                console.log("HIT")
+            }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var otherCars = [];
 
 function animate() {
     requestAnimationFrame( animate );
-    TWEEN.update()
+    TWEEN.update();
+    Collision();
 	renderer.render( scene, camera );
+}
+
+var clock = new THREE.Clock()
+var time = 0;
+var delta = 0;
+
+
+function render(){
+    delta = clock.getDelta();
+    time += delta;
+    if(time>3){
+        //generate new model
+        //will need separate spawner for each model
+    }
+        
 }
