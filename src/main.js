@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import * as TWEEN from '@tweenjs/tween.js'
 import { Lights } from './helpers/init_lights';
-import { Load_model } from './helpers/import_models';
+import { Load_model } from './helpers/import_player';
+import { Move} from './move.js';
 
 
 const scene = new THREE.Scene();
@@ -15,10 +17,41 @@ camera.position.z = 50;
 camera.position.y = 20;
 
 Lights(scene);
-Load_model(scene);
 
+var player = new THREE.Object3D;
+player.name='player';
+scene.add(player);
+
+Load_model(player,0,0,0);
+
+
+console.log(scene.getObjectByName('player').position);
+
+
+
+function onClick(amount) {
+
+  new TWEEN.Tween(player.position)
+    .to(player.position.clone().setX(player.position.x+amount), 500)
+    .onStart(function() {
+    })
+    .onComplete(function() {
+    })
+    .start();
+}
+ 
 function animate() {
-
+    requestAnimationFrame( animate );
 	renderer.render( scene, camera );
+    
 
+    document.onkeydown = function(e){
+        if(e.key === 'd'){
+            onClick(5)
+        }
+        if(e.key === 'a'){
+            onClick(-5)
+        }
+    }
+    TWEEN.update()
 }
