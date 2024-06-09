@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { Lights } from './init_lights';
-import { Load_model } from './import_models';
+import { Lights } from './helpers/init_lights';
+import { Load_model } from './helpers/import_models';
 
 
 const scene = new THREE.Scene();
@@ -11,12 +11,10 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
-Lights(scene);
-
-
 camera.position.z = 50;
 camera.position.y = 20;
 
+Lights(scene);
 Load_model(scene);
 
 function animate() {
