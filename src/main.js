@@ -4,6 +4,7 @@ import { Lights } from './helpers/init_lights';
 import { Load_model } from './helpers/import_player';
 import { playMusic } from './music';
 import {AnimateMovement} from './move';
+import { Load_model_X } from './helpers/import_others';
 
 
 const scene = new THREE.Scene();
@@ -19,10 +20,10 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.8;
 
 
-let ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x442288).multiplyScalar(1.5)}));
-let ground2 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x224488).multiplyScalar(1.5)}));
+let ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({color: new THREE.Color(0x442288).multiplyScalar(1.5)}));
+let ground2 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({color: new THREE.Color(0x224488).multiplyScalar(1.5)}));
 ground2.position.x=-30
-let ground3 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x444422).multiplyScalar(1.5)}));
+let ground3 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({color: new THREE.Color(0x444422).multiplyScalar(1.5)}));
 ground3.position.x=30
 scene.add(ground);
 scene.add(ground2);
@@ -41,6 +42,8 @@ Lights(scene);
 
 Load_model(player,0,0,0);
 
+var instances = Load_model_X(scene,0,0,0);
+
 playMusic(camera);
 
 document.onkeydown = function (e) {
@@ -52,48 +55,44 @@ document.onkeydown = function (e) {
     }
 }
 
+function gameOver(){
+    const mainMenuElement = document.createElement('div');
+        mainMenuElement.id = 'main-menu';
+        mainMenuElement.innerHTML = `
+            <h1>Main Menu</h1>
+            <button id="start-button">Start Game</button>
+        `;
+        document.body.appendChild(mainMenuElement);
+    document.getElementById('main-menu').style.display = 'block';
+    renderer.domElement.style.display = 'none';
+}
 
 
-function Collision(){
+function Collision(element){
     if(player.position.x > 5 || player.position < -5){
         console.log("crash outside map");
-    } 
-            const otherBoundingBox = new THREE.Box3().setFromObject(cube)
-            const boundingBox = new THREE.Box3().setFromObject(player)
-            if(boundingBox.intersectsBox(otherBoundingBox)){
-                console.log("HIT")
-            }
+    }   
+
+    const otherBoundingBox = new THREE.Box3().setFromObject(element)
+    const boundingBox = new THREE.Box3().setFromObject(player)
+    if(boundingBox.intersectsBox(otherBoundingBox)){
+        console.log("HIT");
+        gameOver();
+    }
 }
 
 
-
-
-
-
-
-
-
-
-var otherCars = [];
 
 function animate() {
-    requestAnimationFrame( animate );
+    //requestAnimationFrame( animate );
+    instances.forEach(element => {
+        element.position.z += 0.2*element.userData.speed;
+        if(element.position.z>20){
+            scene.remove(element);
+            instances.shift();
+        }
+        Collision(element)
+    });
     TWEEN.update();
-    //Collision();
 	renderer.render( scene, camera );
-}
-
-var clock = new THREE.Clock()
-var time = 0;
-var delta = 0;
-
-
-function render(){
-    delta = clock.getDelta();
-    time += delta;
-    if(time>3){
-        //generate new model
-        //will need separate spawner for each model
-    }
-        
 }
