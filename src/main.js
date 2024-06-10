@@ -5,13 +5,30 @@ import { Load_model } from './helpers/import_player';
 import { playMusic } from './music';
 import {AnimateMovement} from './move';
 
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 2000 );
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
+
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.8;
+
+
+let ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x442288).multiplyScalar(1.5)}));
+let ground2 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x224488).multiplyScalar(1.5)}));
+ground2.position.x=-30
+let ground3 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5).rotateY(-0.05), new THREE.MeshBasicMaterial({color: new THREE.Color(0x444422).multiplyScalar(1.5)}));
+ground3.position.x=30
+scene.add(ground);
+scene.add(ground2);
+scene.add(ground3);
+
+
 
 camera.position.z = 50;
 camera.position.y = 20;
@@ -28,18 +45,13 @@ playMusic(camera);
 
 document.onkeydown = function (e) {
     if (e.key === 'd') {
-        AnimateMovement(player,5)
+        AnimateMovement(player,30)
     }
     if (e.key === 'a') {
-        AnimateMovement(player,-5)
+        AnimateMovement(player,-30)
     }
 }
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 ); 
-const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} ); 
-const cube = new THREE.Mesh( geometry, material ); 
-cube.position.set(10,0,0);
-scene.add( cube );
 
 
 function Collision(){
@@ -62,16 +74,12 @@ function Collision(){
 
 
 
-
-
-
-
 var otherCars = [];
 
 function animate() {
     requestAnimationFrame( animate );
     TWEEN.update();
-    Collision();
+    //Collision();
 	renderer.render( scene, camera );
 }
 
