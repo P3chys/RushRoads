@@ -56,15 +56,16 @@ document.onkeydown = function (e) {
 }
 
 function gameOver(){
-    const mainMenuElement = document.createElement('div');
-        mainMenuElement.id = 'main-menu';
-        mainMenuElement.innerHTML = `
-            <h1>Main Menu</h1>
-            <button id="start-button">Start Game</button>
-        `;
-        document.body.appendChild(mainMenuElement);
-    document.getElementById('main-menu').style.display = 'block';
+   // const mainMenuElement = document.createElement('div');
+    //    mainMenuElement.id = 'main-menu';
+     //   mainMenuElement.innerHTML = `
+      //      <h1>Main Menu</h1>
+       //     <button id="start-button">Start Game</button>
+        //`;
+       // document.body.appendChild(mainMenuElement);
+    //document.getElementById('main-menu').style.display = 'block';
     renderer.domElement.style.display = 'none';
+    window.location.href = "menu.html";
 }
 
 
