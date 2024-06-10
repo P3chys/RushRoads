@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Game Menu</title>
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Car Game</h1>
+        <button class="menu-button" onclick="startNewGame()">New Game</button>
+        <button class="menu-button" onclick="openShop()">Shop</button>
+        <button class="menu-button" onclick="changeCarModel()">Change Car Model</button>
+    </div>
+
+    <script>
+        function startNewGame() {
+            window.location.href = "level_selection.html";
+        }
+
+        function openShop() {
+            alert("Opening the shop...");
+            // Add your shop logic here
+        }
+
+        function changeCarModel() {
+            alert("Changing car model...");
+            // Add your car model change logic here
+        }
+    </script>
+</body>
+</html>

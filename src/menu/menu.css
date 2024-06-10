@@ -1,0 +1,65 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #2c3e50, #bdc3c7);
+    font-family: 'Roboto', sans-serif;
+}
+
+.menu-container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.menu-container h1 {
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    letter-spacing: 2px;
+}
+
+.menu-button {
+    display: block;
+    width: 250px;
+    padding: 15px 0;
+    margin: 15px auto;
+    background: linear-gradient(135deg, #3498db, #2ecc71);
+    border: none;
+    border-radius: 25px;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+}
+
+.menu-button:hover {
+    background: linear-gradient(135deg, #2ecc71, #3498db);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px);
+}
+
+.menu-button:active {
+    background: linear-gradient(135deg, #1abc9c, #2980b9);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    transform: translateY(2px);
+}
