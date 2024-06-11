@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +8,41 @@
     <link rel="stylesheet" href="menu.css">
 </head>
 <body>
-    <div class="menu-container">
+    <div class="menu-container" id="main-menu">
         <h1>Car Game</h1>
         <button class="menu-button" onclick="startNewGame()">New Game</button>
         <button class="menu-button" onclick="openShop()">Shop</button>
         <button class="menu-button" onclick="changeCarModel()">Change Car Model</button>
     </div>
 
+    <div class="menu-container" id="level-select" style="display: none;">
+        <h1>Select Level</h1>
+        <button class="menu-button" id="level-1" onclick="selectLevel(1)">Level 1 <span class="map-distance"></span></button>
+        <button class="menu-button" id="level-2" onclick="selectLevel(2)">Level 2 <span class="map-distance"></span></button>
+        <button class="menu-button" id="level-3" onclick="selectLevel(3)">Level 3 <span class="map-distance"></span></button>
+    </div>
+
     <script>
         function startNewGame() {
-            window.location.href = "level_selection.html";
+            if (sessionStorage.getItem("user_exists") === null) {
+    sessionStorage.setItem("user_exists",true);
+    sessionStorage.setItem("coins",0);
+    sessionStorage.setItem("map_1",true);
+    sessionStorage.setItem("map_2",false);
+    sessionStorage.setItem("map_3",false);
+    sessionStorage.setItem("car_1",true);
+    sessionStorage.setItem("car_2",false);
+    sessionStorage.setItem("car_3",false);
+    sessionStorage.setItem("item_1",0);
+    sessionStorage.setItem("item_2",0);
+    sessionStorage.setItem("distance_map_1",0);
+    sessionStorage.setItem("distance_map_2",0);
+    sessionStorage.setItem("distance_map_3",0);
+    }
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('level-select').style.display = 'block';
+            displayMapDistances();
+            checkMapLocks();
         }
 
         function openShop() {
@@ -28,6 +54,53 @@
             alert("Changing car model...");
             // Add your car model change logic here
         }
+
+        function selectLevel(level) {
+            alert("You selected Level " + level);
+            // Add your level selection logic here
+        }
+
+        function displayMapDistances() {
+            const distances = [
+                
+sessionStorage.getItem('distance_map_1'),
+sessionStorage.getItem('distance_map_2'),
+sessionStorage.getItem('distance_map_3')
+            ];
+
+            document.getElementById('level-1').querySelector('.map-distance').innerText = `${distances[0]}m`;
+            document.getElementById('level-2').querySelector('.map-distance').innerText = `${distances[1]}m`;
+            document.getElementById('level-3').querySelector('.map-distance').innerText = `${distances[2]}m`;
+        }
+
+        function checkMapLocks() {
+            const map2Locked = sessionStorage.getItem('map_2') === 'false';
+            const map3Locked = sessionStorage.getItem('map_3') === 'false';
+
+            if (map2Locked) {
+                lockMap('level-2');
+            }
+            if (map3Locked) {
+                lockMap('level-3');
+            }
+        }
+
+        function lockMap(levelId) {
+            const levelButton = document.getElementById(levelId);
+            levelButton.disabled = true;
+            levelButton.innerHTML += ' <span class="lock">🔒</span>';
+            levelButton.classList.add('locked');
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

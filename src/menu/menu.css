@@ -50,6 +50,7 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
+    position: relative;
 }
 
 .menu-button:hover {
@@ -62,4 +63,26 @@ body {
     background: linear-gradient(135deg, #1abc9c, #2980b9);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
     transform: translateY(2px);
+}
+
+.menu-button.locked {
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+    cursor: not-allowed;
+}
+
+.map-distance {
+    font-size: 0.8em;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 7px;
+    border-radius: 10px;
+}
+
+.lock {
+    font-size: 1em;
+    color: #e74c3c;
 }
