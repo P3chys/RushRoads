@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Game Menu</title>
     <link rel="stylesheet" href="menu.css">
 </head>
+
 <body>
     <div class="menu-container" id="main-menu">
         <h1>Car Game</h1>
@@ -17,28 +18,31 @@
 
     <div class="menu-container" id="level-select" style="display: none;">
         <h1>Select Level</h1>
-        <button class="menu-button" id="level-1" onclick="selectLevel(1)">Level 1 <span class="map-distance"></span></button>
-        <button class="menu-button" id="level-2" onclick="selectLevel(2)">Level 2 <span class="map-distance"></span></button>
-        <button class="menu-button" id="level-3" onclick="selectLevel(3)">Level 3 <span class="map-distance"></span></button>
+        <button class="menu-button" id="level-1" onclick="selectLevel(1)">Level 1 <span
+                class="map-distance"></span></button>
+        <button class="menu-button" id="level-2" onclick="selectLevel(2)">Level 2 <span
+                class="map-distance"></span></button>
+        <button class="menu-button" id="level-3" onclick="selectLevel(3)">Level 3 <span
+                class="map-distance"></span></button>
     </div>
 
     <script>
         function startNewGame() {
             if (sessionStorage.getItem("user_exists") === null) {
-    sessionStorage.setItem("user_exists",true);
-    sessionStorage.setItem("coins",0);
-    sessionStorage.setItem("map_1",true);
-    sessionStorage.setItem("map_2",false);
-    sessionStorage.setItem("map_3",false);
-    sessionStorage.setItem("car_1",true);
-    sessionStorage.setItem("car_2",false);
-    sessionStorage.setItem("car_3",false);
-    sessionStorage.setItem("item_1",0);
-    sessionStorage.setItem("item_2",0);
-    sessionStorage.setItem("distance_map_1",0);
-    sessionStorage.setItem("distance_map_2",0);
-    sessionStorage.setItem("distance_map_3",0);
-    }
+                sessionStorage.setItem("user_exists", true);
+                sessionStorage.setItem("coins", 0);
+                sessionStorage.setItem("map_1", true);
+                sessionStorage.setItem("map_2", false);
+                sessionStorage.setItem("map_3", false);
+                sessionStorage.setItem("car_1", true);
+                sessionStorage.setItem("car_2", false);
+                sessionStorage.setItem("car_3", false);
+                sessionStorage.setItem("item_1", 0);
+                sessionStorage.setItem("item_2", 0);
+                sessionStorage.setItem("distance_map_1", 0);
+                sessionStorage.setItem("distance_map_2", 0);
+                sessionStorage.setItem("distance_map_3", 0);
+            }
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('level-select').style.display = 'block';
             displayMapDistances();
@@ -56,16 +60,15 @@
         }
 
         function selectLevel(level) {
-            alert("You selected Level " + level);
-            // Add your level selection logic here
+            window.location.href = "http://localhost:5173"
         }
 
         function displayMapDistances() {
             const distances = [
-                
-sessionStorage.getItem('distance_map_1'),
-sessionStorage.getItem('distance_map_2'),
-sessionStorage.getItem('distance_map_3')
+
+                sessionStorage.getItem('distance_map_1'),
+                sessionStorage.getItem('distance_map_2'),
+                sessionStorage.getItem('distance_map_3')
             ];
 
             document.getElementById('level-1').querySelector('.map-distance').innerText = `${distances[0]}m`;
@@ -93,14 +96,5 @@ sessionStorage.getItem('distance_map_3')
         }
     </script>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-

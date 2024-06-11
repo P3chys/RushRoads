@@ -8,6 +8,7 @@ export function Load_model_X(scene){
     var mesh = new THREE.Object3D();
     const numbers = [-15, 15, -45];
     
+
     var instances = []
         loader.load(
             './models/car02.glb',

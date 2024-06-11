@@ -5,12 +5,17 @@ import { Load_model } from './helpers/import_player';
 import { playMusic } from './music';
 import { AnimateMovement } from './move';
 import { Load_model_X } from './helpers/import_others';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { Load_trees } from './helpers/spawn_trees';
 
 
 
-if (sessionStorage.getItem("user_exists") === null) {window.location.href = "./menu/menu.html";} 
+
+
+if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./menu/menu.html"; }
 
 var scene, camera, renderer, player, score, clock;
+const rgbeLoader = new RGBELoader();
 
 function init_scene() {
     scene = new THREE.Scene();
@@ -31,11 +36,27 @@ function init_scene() {
     ground2.position.x = -30
     let ground3 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(1.5) }));
     ground3.position.x = 30
+    
     scene.add(ground);
     scene.add(ground2);
     scene.add(ground3);
+    
 
 
+    rgbeLoader.load('./models/map.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = texture;
+        scene.background = texture;
+    });
+
+
+    let groundx = new THREE.Mesh(
+        new THREE.PlaneGeometry(2000, 2000).rotateX(-Math.PI * 0.5),
+        new THREE.MeshBasicMaterial({color: 0x000000})
+    );
+    groundx.position.z = -1
+
+    scene.add(groundx);
 
     camera.position.z = 50;
     camera.position.y = 20;
@@ -54,8 +75,8 @@ function init_player() {
 }
 
 function gameOver() {
-    if(sessionStorage.getItem("distance_map_1") < clock.getElapsedTime()){
-        sessionStorage.setItem("distance_map_1",clock.getElapsedTime())
+    if (sessionStorage.getItem("distance_map_1") < clock.getElapsedTime()) {
+        sessionStorage.setItem("distance_map_1", clock.getElapsedTime())
     }
     clock.stop();
     renderer.domElement.style.display = 'none';
@@ -80,6 +101,8 @@ init_player();
 
 var instances = Load_model_X(scene, 0, 0, 0);
 
+var instances_trees = Load_trees(scene, 0, 0, 0);
+
 playMusic(camera);
 
 document.onkeydown = function (e) {
@@ -103,11 +126,16 @@ function animate() {
         }
         Collision(element)
     });
+
+    instances_trees.forEach(tree =>{
+        tree.position.z += 3;
+    });
     TWEEN.update();
     renderer.render(scene, camera);
 }
 
-//ADD Player stats (owned items, cars, coins, distance per map)
+//DONE:
+    //ADD Player stats (owned items, cars, coins, distance per map)
 
 //ADD handle distance, coins at endgame
 
