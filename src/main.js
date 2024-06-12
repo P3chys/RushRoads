@@ -8,6 +8,7 @@ import { Load_model_X } from './helpers/import_others';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { Load_assets } from './helpers/spawn_trees';
 import { roughness } from 'three/examples/jsm/nodes/Nodes.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 
 
@@ -43,6 +44,7 @@ function init_scene() {
     scene.add(ground3);
     
     scene.fog = new THREE.Fog( 0xaaaaaa, 650, 850 );
+    //new THREE.TextGeometry( text, "hello" );
 
     rgbeLoader.load('./models/map.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -66,7 +68,12 @@ function init_scene() {
 
     clock = new THREE.Clock();
     clock.getDelta();
+    setInterval(ShowScore, 1000);
+}
 
+function ShowScore(){
+    var x = clock.getElapsedTime();
+    document.getElementById("info").innerHTML = "Distance: "+Math.trunc(x);
 }
 
 function init_player() {
@@ -124,7 +131,7 @@ gameSpeed = 0.2;
 function animate() {
     instances.forEach(element => {
         element.position.z += 0.5 * element.userData.speed;
-        if (element.position.z > 150) {
+        if (element.position.z > 200) {
             scene.remove(element);
             instances.shift();
         }
@@ -133,6 +140,10 @@ function animate() {
 
     instances_assets.forEach(asset =>{
         asset.position.z += 1;
+        if (asset.position.z > 200) {
+            scene.remove(asset);
+            instances_assets.shift();
+        }
     });
     TWEEN.update();
     renderer.render(scene, camera);
@@ -141,7 +152,7 @@ function animate() {
 //DONE:
     //ADD Player stats (owned items, cars, coins, distance per map)
 
-//ADD handle distance, coins at endgame
+    //ADD handle distance, coins at endgame
 
 //CREATE items and item control handle
 
