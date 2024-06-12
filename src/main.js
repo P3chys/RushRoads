@@ -7,6 +7,7 @@ import { AnimateMovement } from './move';
 import { Load_model_X } from './helpers/import_others';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { Load_trees } from './helpers/spawn_trees';
+import { roughness } from 'three/examples/jsm/nodes/Nodes.js';
 
 
 
@@ -52,7 +53,7 @@ function init_scene() {
 
     let groundx = new THREE.Mesh(
         new THREE.PlaneGeometry(2000, 2000).rotateX(-Math.PI * 0.5),
-        new THREE.MeshBasicMaterial({color: 0x000000})
+        new THREE.MeshToonMaterial({color: 0x136d15, roughness: 10,})
     );
     groundx.position.z = -1
 
@@ -71,7 +72,7 @@ function init_player() {
     player = new THREE.Object3D;
     player.name = 'player';
     scene.add(player);
-    Load_model(player, 0, 0, 0);
+    Load_model(player, 0, 4, 0);
 }
 
 function gameOver() {
@@ -85,13 +86,13 @@ function gameOver() {
 
 function Collision(element) {
     if (player.position.x > 5 || player.position < -5) {
-        console.log("crash outside map");
+        //console.log("crash outside map");
     }
 
     const otherBoundingBox = new THREE.Box3().setFromObject(element)
     const boundingBox = new THREE.Box3().setFromObject(player)
     if (boundingBox.intersectsBox(otherBoundingBox)) {
-        console.log("HIT");
+        //console.log("HIT");
         gameOver();
     }
 }
@@ -99,7 +100,7 @@ function Collision(element) {
 init_scene();
 init_player();
 
-var instances = Load_model_X(scene, 0, 0, 0);
+var instances = Load_model_X(scene);
 
 var instances_trees = Load_trees(scene, 0, 0, 0);
 
@@ -114,21 +115,26 @@ document.onkeydown = function (e) {
     }
 }
 
+gameSpeed = 0.2;
 
 
 function animate() {
-    //requestAnimationFrame( animate );
+    
     instances.forEach(element => {
-        element.position.z += 0.2 * element.userData.speed;
+        element.position.z += gameSpeed * element.userData.speed;
         if (element.position.z > 20) {
             scene.remove(element);
-            instances.shift();
+            instances.splice(instances.indexOf(element),1);
         }
-        Collision(element)
+       Collision(element)
     });
 
     instances_trees.forEach(tree =>{
-        tree.position.z += 3;
+        tree.position.z += 0.5;
+        if (tree.position.z > 20) {
+            scene.remove(tree);
+            instances.splice(instances.indexOf(tree),1);
+        }
     });
     TWEEN.update();
     renderer.render(scene, camera);

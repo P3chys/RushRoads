@@ -9,7 +9,6 @@ export function Load_model(scene,x,y,z){
         loader.load(
             './models/car03.glb',
             function ( gltf ) {
-                console.log(gltf);
                 mesh = gltf.scene
                 var materials = gltf.materials;
                 var nodes = gltf.children;
@@ -17,8 +16,8 @@ export function Load_model(scene,x,y,z){
                 mesh.scale.y=4;
                 mesh.scale.z=4;
                 mesh.rotateY(-Math.PI * 45);
-                console.log(mesh.children)
-                console.log(materials);
+                mesh.position.set(0,4,0);
+
                 mesh.castShadow = true;
                 scene.add(mesh);  
             }

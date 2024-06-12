@@ -1,42 +1,67 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+function getRandomPosition(){
+    const numbers = [30, 0, -30];
+    const randomIndex = Math.floor(Math.random() * numbers.length);
+    return numbers[randomIndex];
+}
 
 
 export function Load_model_X(scene){
-    var loader = new GLTFLoader();
-    var mesh = new THREE.Object3D();
-    const numbers = [-15, 15, -45];
+setInterval(loadRandomGLB, 2000);
+var models = [];
+const manager = new THREE.LoadingManager();
     
+    // Functions to handle the loading process
+    manager.onStart = function (url, itemsLoaded, itemsTotal) {
+        console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+    };
 
-    var instances = []
-        loader.load(
-            './models/car02.glb',
-            function ( gltf ) {
-                mesh = gltf.scene;
-                mesh.scale.x=4;
-                mesh.scale.y=4;
-                mesh.scale.z=4;
-                const spawnInterval = setInterval(() => {
-                const modelInstance = mesh.clone();
-                modelInstance.frustumCulled = true;
-                const randomIndex = Math.floor(Math.random() * numbers.length);
-                modelInstance.position.set(numbers[randomIndex],0,-500);
-                modelInstance.rotateX(-Math.PI * 0);
+    manager.onLoad = function () {
+        console.log('Loading complete!');
+    };
 
-                if(modelInstance.position.x == 15){
-                    modelInstance.userData.speed = 10;
-                }else if(modelInstance.position.x == -15){
-                    modelInstance.userData.speed = 7;
-                }else{
-                    modelInstance.userData.speed = 9;
-                }
-                
-                instances.push(modelInstance);
-                scene.add(modelInstance);
-                console.log(modelInstance.userData.speed);
-               
-            },2000);
+    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+        console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+    };
+
+    manager.onError = function (url) {
+        console.log('There was an error loading ' + url);
+    };
+
+    // GLTFLoader instance with the manager
+    const loader = new GLTFLoader(manager);
+
+    // Array of GLB file paths
+    const glbFiles = ['./models/car.glb', './models/car02.glb','./models/car03.glb'];
+
+    
+    function loadRandomGLB() {
+        const randomIndex = Math.floor(Math.random() * glbFiles.length);
+        const selectedFile = glbFiles[randomIndex];
+
+        loader.load(selectedFile, function (gltf) {
+            const model = gltf.scene;
+            model.scale.x = 4;
+            model.scale.z = 4;
+            model.scale.y = 4;
+            model.position.set(getRandomPosition(), 4, -2000);
+            if(model.position.x == 30){
+                model.userData.speed = 16;
+            }else if(model.position.x == 0){
+                model.userData.speed = 14;
+            }else{
+                model.userData.speed = 12;
+            }
+            scene.add(model);
+            models.push(model);
+        }, undefined, function (error) {
+            console.error('An error happened', error);
         });
-        return instances;
+    }
+
+    
+    return models;
+    
 }
