@@ -6,7 +6,7 @@ import { playMusic } from './music';
 import { AnimateMovement } from './move';
 import { Load_model_X } from './helpers/import_others';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { Load_trees } from './helpers/spawn_trees';
+import { Load_assets } from './helpers/spawn_trees';
 import { roughness } from 'three/examples/jsm/nodes/Nodes.js';
 
 
@@ -15,7 +15,7 @@ import { roughness } from 'three/examples/jsm/nodes/Nodes.js';
 
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./menu/menu.html"; }
 
-var scene, camera, renderer, player, score, clock;
+var scene, camera, renderer, player, score, clock, gameSpeed;
 const rgbeLoader = new RGBELoader();
 
 function init_scene() {
@@ -66,6 +66,7 @@ function init_scene() {
 
     clock = new THREE.Clock();
     clock.getDelta();
+
 }
 
 function init_player() {
@@ -102,39 +103,36 @@ init_player();
 
 var instances = Load_model_X(scene);
 
-var instances_trees = Load_trees(scene, 0, 0, 0);
+var instances_assets = Load_assets(scene, 0, 0, 0);
 
 playMusic(camera);
 
 document.onkeydown = function (e) {
     if (e.key === 'd') {
-        AnimateMovement(player, 30)
+        AnimateMovement(player, 30);
     }
     if (e.key === 'a') {
-        AnimateMovement(player, -30)
+        AnimateMovement(player, -30);
     }
 }
 
 gameSpeed = 0.2;
 
 
+
+
 function animate() {
-    
     instances.forEach(element => {
-        element.position.z += gameSpeed * element.userData.speed;
-        if (element.position.z > 20) {
+        element.position.z += 0.5 * element.userData.speed;
+        if (element.position.z > 150) {
             scene.remove(element);
-            instances.splice(instances.indexOf(element),1);
+            instances.shift();
         }
-       Collision(element)
+        //Collision(element)
     });
 
-    instances_trees.forEach(tree =>{
-        tree.position.z += 0.5;
-        if (tree.position.z > 20) {
-            scene.remove(tree);
-            instances.splice(instances.indexOf(tree),1);
-        }
+    instances_assets.forEach(asset =>{
+        asset.position.z += 1;
     });
     TWEEN.update();
     renderer.render(scene, camera);

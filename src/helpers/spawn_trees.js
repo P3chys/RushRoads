@@ -14,33 +14,57 @@ function getRandomNumber() {
     return randomNumber;
   }
 
-export function Load_trees(scene){
-    var loader = new GLTFLoader();
-    var mesh = new THREE.Object3D();
 
-    var instances = []
-        loader.load(
-            './models/tree.glb',
-            function ( gltf ) {
-                mesh = gltf.scene;
-                mesh.scale.x=12;
-                mesh.scale.y=12;
-                mesh.scale.z=12;
-                const spawnInterval = setInterval(() => {
-                const modelInstance = mesh.clone();
+export function Load_assets(scene){
+  setInterval(loadRandomGLB, 200);
+  var models=[];
+  const manager = new THREE.LoadingManager();
+    
+    // Functions to handle the loading process
+    manager.onStart = function (url, itemsLoaded, itemsTotal) {
+        console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+    };
+
+    manager.onLoad = function () {
+        console.log('Loading complete!');
+    };
+
+    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
+        console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
+    };
+
+    manager.onError = function (url) {
+        console.log('There was an error loading ' + url);
+    };
+
+    // GLTFLoader instance with the manager
+    const loader = new GLTFLoader(manager);
+
+    // Array of GLB file paths
+    const glbFiles = ['./models/tree.glb', './models/tree2.glb','./models/stone1.glb','./models/stone2.glb'];
+    
+    function loadRandomGLB() {
+      const randomIndex = Math.floor(Math.random() * glbFiles.length);
+      const selectedFile = glbFiles[randomIndex];
+
+      loader.load(selectedFile, function (gltf) {
+          const model = gltf.scene;
+          model.scale.x=12;
+          model.scale.y=12;
+          model.scale.z=12;
+                
+                const modelInstance = model.clone();
                 modelInstance.frustumCulled = true;
                 modelInstance.castShadow = true;
                 const randomNum = getRandomNumber();
-                modelInstance.position.set( randomNum,-1,-500);
+                modelInstance.position.set( randomNum,-1,-800);
                 modelInstance.rotateY(-Math.PI * Math.random() *(100));
                 modelInstance.rotateZ(-Math.PI * Math.random() *(0.1));
-                //modelInstance.rotateX(-Math.PI * Math.random() *(0.2));
                 
-                instances.push(modelInstance);
+                models.push(modelInstance);
                 scene.add(modelInstance);
-                //console.log(modelInstance.userData.speed);
-               
-            },200);
         });
-        return instances
+    }
+
+        return models;
 }

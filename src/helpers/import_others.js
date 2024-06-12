@@ -7,9 +7,11 @@ function getRandomPosition(){
     return numbers[randomIndex];
 }
 
-
+function getRandomDelay(){
+    return Math.floor(Math.random()* (600-400+1)) + 400;
+}
 export function Load_model_X(scene){
-setInterval(loadRandomGLB, 2000);
+setInterval(loadRandomGLB, getRandomDelay());
 var models = [];
 const manager = new THREE.LoadingManager();
     
@@ -46,7 +48,7 @@ const manager = new THREE.LoadingManager();
             model.scale.x = 4;
             model.scale.z = 4;
             model.scale.y = 4;
-            model.position.set(getRandomPosition(), 4, -2000);
+            model.position.set(getRandomPosition(), 4, -800);
             if(model.position.x == 30){
                 model.userData.speed = 16;
             }else if(model.position.x == 0){
@@ -59,9 +61,10 @@ const manager = new THREE.LoadingManager();
         }, undefined, function (error) {
             console.error('An error happened', error);
         });
+        
     }
-
-    
     return models;
+    
+    
     
 }
