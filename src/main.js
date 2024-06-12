@@ -42,7 +42,7 @@ function init_scene() {
     scene.add(ground2);
     scene.add(ground3);
     
-
+    scene.fog = new THREE.Fog( 0xaaaaaa, 650, 850 );
 
     rgbeLoader.load('./models/map.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
