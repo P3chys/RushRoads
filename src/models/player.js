@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Load_model } from '/src/utils/import_player';
+import { Load_model } from '/src/utils/importPlayer';
 
 export function initPlayer(scene) {
     let player = new THREE.Object3D;
