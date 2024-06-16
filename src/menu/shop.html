@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Game Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .shop {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .shop h1 {
+            margin-bottom: 20px;
+        }
+
+        .item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .item h2 {
+            margin: 0 0 10px 0;
+        }
+
+        .item button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .item button:disabled {
+            background-color: #aaa;
+        }
+
+        .coins {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <a href="./menu" class="menu-button">Menu</a>
+    <div class="shop">
+        <h1>Car Game Shop</h1>
+        <div class="item" data-item="car2" data-price="100">
+            <h2>Car 2</h2>
+            <p>Price: 100 Coins</p>
+            <button>Buy</button>
+        </div>
+        <div class="item" data-item="car3" data-price="150">
+            <h2>Car 3</h2>
+            <p>Price: 150 Coins</p>
+            <button>Buy</button>
+        </div>
+        <div class="item" data-item="map2" data-price="200">
+            <h2>Map 2</h2>
+            <p>Price: 200 Coins</p>
+            <button>Buy</button>
+        </div>
+        <div class="item" data-item="map3" data-price="250">
+            <h2>Map 3</h2>
+            <p>Price: 250 Coins</p>
+            <button>Buy</button>
+        </div>
+        <div class="item" data-item="invincible" data-price="50">
+            <h2>Invincible</h2>
+            <p>Price: 50 Coins</p>
+            <button>Buy</button>
+        </div>
+        <div class="item" data-item="slow-down" data-price="75">
+            <h2>Slow Down</h2>
+            <p>Price: 75 Coins</p>
+            <button>Buy</button>
+        </div>
+        <p class="coins">Coins: <span id="coin-count">0</span></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const coinCountElement = document.getElementById('coin-count');
+            let coins = parseInt(sessionStorage.getItem('coins')) || 0;
+            coinCountElement.textContent = coins;
+
+            document.querySelectorAll('.item').forEach(item => {
+                const itemName = item.getAttribute('data-item');
+                const itemPrice = parseInt(item.getAttribute('data-price'));
+                const button = item.querySelector('button');
+
+                button.addEventListener('click', () => {
+                    if (coins >= itemPrice) {
+                        coins -= itemPrice;
+                        sessionStorage.setItem('coins', coins);
+                        coinCountElement.textContent = coins;
+
+                        if (['car2', 'car3', 'map2', 'map3'].includes(itemName)) {
+                            sessionStorage.setItem(itemName, 'true');
+                        } else if (['invincible', 'slow-down'].includes(itemName)) {
+                            let count = parseInt(sessionStorage.getItem(itemName)) || 0;
+                            sessionStorage.setItem(itemName, count + 1);
+                        }
+                        alert(`${itemName} purchased!`);
+                        button.disabled = true;
+                    } else {
+                        alert('Not enough coins!');
+                    }
+                });
+
+                if (sessionStorage.getItem(itemName) === 'true' || parseInt(sessionStorage.getItem(itemName)) > 0) {
+                    button.disabled = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

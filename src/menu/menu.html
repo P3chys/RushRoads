@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    
     <div class="menu-container" id="main-menu">
         <h1>Car Game</h1>
         <button class="menu-button" onclick="startNewGame()">New Game</button>
@@ -31,14 +32,14 @@
             if (sessionStorage.getItem("user_exists") === null) {
                 sessionStorage.setItem("user_exists", true);
                 sessionStorage.setItem("coins", 0);
-                sessionStorage.setItem("map_1", true);
-                sessionStorage.setItem("map_2", false);
-                sessionStorage.setItem("map_3", false);
-                sessionStorage.setItem("car_1", true);
-                sessionStorage.setItem("car_2", false);
-                sessionStorage.setItem("car_3", false);
-                sessionStorage.setItem("item_1", 0);
-                sessionStorage.setItem("item_2", 0);
+                sessionStorage.setItem("map1", true);
+                sessionStorage.setItem("map2", false);
+                sessionStorage.setItem("map3", false);
+                sessionStorage.setItem("car1", true);
+                sessionStorage.setItem("car2", false);
+                sessionStorage.setItem("car3", false);
+                sessionStorage.setItem("invincible", 0);
+                sessionStorage.setItem("slow-down", 0);
                 sessionStorage.setItem("distance_map_1", 0);
                 sessionStorage.setItem("distance_map_2", 0);
                 sessionStorage.setItem("distance_map_3", 0);
@@ -50,8 +51,7 @@
         }
 
         function openShop() {
-            alert("Opening the shop...");
-            // Add your shop logic here
+            window.location.href = "http://localhost:5173/menu/shop"
         }
 
         function changeCarModel() {
@@ -60,6 +60,7 @@
         }
 
         function selectLevel(level) {
+            sessionStorage.setItem("currentMap",level);
             window.location.href = "http://localhost:5173"
         }
 
