@@ -36,7 +36,7 @@ const manager = new THREE.LoadingManager();
     const loader = new GLTFLoader(manager);
 
     // Array of GLB file paths
-    const glbFiles = ['assets/models/car.glb', 'assets/models/car02.glb','assets/models/car03.glb'];
+    const glbFiles = ['assets/models/car.glb', 'assets/models/car02.glb','assets/models/car03.glb', 'assets/models/coin.glb'];
 
     
     function loadRandomGLB() {
@@ -45,9 +45,17 @@ const manager = new THREE.LoadingManager();
 
         loader.load(selectedFile, function (gltf) {
             const model = gltf.scene;
-            model.scale.x = 4;
-            model.scale.z = 4;
-            model.scale.y = 4;
+            if(model.children.length == 1){
+                model.scale.x = 8;
+                model.scale.z = 8;
+                model.scale.y = 8;
+                model.userData.type = "coin";
+            }else{
+                model.scale.x = 4;
+                model.scale.z = 4;
+                model.scale.y = 4;
+            }
+            
             model.position.set(getRandomPosition(), 4, -800);
             if(model.position.x == 30){
                 model.userData.speed = 16;

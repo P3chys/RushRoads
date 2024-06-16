@@ -11,7 +11,7 @@ import { Load_assets } from './src/utils/spawn_trees';
 
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
-var scene, camera, renderer, player, clock, gameSpeed=0.5, collision_flag=true;
+var scene, camera, renderer, player, clock, gameSpeed=0.5, collision_flag=true, coins = 0;
 const rLane = 30, lLane = -30, bonusTime = 5000, removeBoundry=200, assetSpeed = 1;
 const cameraFOV = 75, cameraNear = 0.1, cameraFar = 2000;
 const toneMappingExposure = 1.8, fogNear = 650, fogFar = 850;
@@ -111,6 +111,9 @@ function gameOver() {
     if (sessionStorage.getItem("distance_map_1") < clock.getElapsedTime()) {
         sessionStorage.setItem("distance_map_1", clock.getElapsedTime())
     }
+    let curCoins = parseInt(sessionStorage.getItem("coins"));
+    sessionStorage.setItem("coins",curCoins+coins);
+
     clock.stop();
     renderer.domElement.style.display = 'none';
     window.location.href = "./menu/menu.html";
@@ -121,11 +124,16 @@ function Collision(element) {
     if (player.position.x > rLane || player.position < lLane) {
         gameOver();
     }
-
     const otherBoundingBox = new THREE.Box3().setFromObject(element)
     const boundingBox = new THREE.Box3().setFromObject(player)
     if (boundingBox.intersectsBox(otherBoundingBox)) {
-        gameOver();
+        if(element.userData.type == "coin"){
+            coins++;
+            scene.remove(element);
+        }else{
+            gameOver();
+        }
+        
     }
 }
 }
@@ -172,7 +180,7 @@ function animate() {
             scene.remove(element);
             instances.shift();
         }
-        Collision(element)
+       Collision(element)
     });
 
     instances_assets.forEach(asset => {
