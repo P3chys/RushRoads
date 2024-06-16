@@ -44,7 +44,7 @@ export function initRoads(scene){
     
     ground2.position.x = lLane;
     ground3.position.x = rLane;
-    groundx.position.z = -1; //so it is below
+    groundx.position.y = -2; //so it is below
 
     scene.add(ground);
     scene.add(ground2);

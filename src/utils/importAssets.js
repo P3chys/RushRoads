@@ -40,6 +40,11 @@ export function loadAssets(scene) {
       assetScale = 12, assetPositionZ = -10, assetPositionX = -800; assetRotationY = 100, assetRotationZ = 0;
       glbFiles = ['assets/models/lamp.glb', 'assets/models/skyscraper1.glb'];
       break;
+    case 3:
+      minAssetWidth = -700, maxAssetWidth = 700, excludedMin = -100, excludedMax = 100, spawnerFrequency = 800;
+      assetScale = 12, assetPositionZ = -10, assetPositionX = -800; assetRotationY = 100, assetRotationZ = 0;
+      glbFiles = ['assets/models/cliff.glb', 'assets/models/island1.glb', 'assets/models/island2.glb'];
+      break;
     default:
       break;
   }
