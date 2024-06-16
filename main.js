@@ -9,7 +9,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { Load_assets } from './helpers/spawn_trees';
 
 
-if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./menu/menu.html"; }
+if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
 var scene, camera, renderer, player, clock, gameSpeed=0.5, collision_flag=true;
 const rLane = 30, lLane = -30, bonusTime = 5000, removeBoundry=200, assetSpeed = 1;
