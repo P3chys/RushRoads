@@ -15,6 +15,7 @@
         <button class="menu-button" onclick="startNewGame()">New Game</button>
         <button class="menu-button" onclick="openShop()">Shop</button>
         <button class="menu-button" onclick="changeCarModel()">Change Car Model</button>
+        <button class="menu-button" onclick="instructions()">Instructions</button>
     </div>
 
     <div class="menu-container" id="level-select" style="display: none;">
@@ -52,6 +53,10 @@
 
         function openShop() {
             window.location.href = "http://localhost:5173/menu/shop"
+        }
+
+        function instructions() {
+            window.location.href = "http://localhost:5173/menu/instructions.html"
         }
 
         function changeCarModel() {
