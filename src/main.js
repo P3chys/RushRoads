@@ -146,14 +146,21 @@ document.onkeydown = function (e) {
     if (e.key === 'a') {
         AnimateMovement(player, lLane);
     }
-    if (e.key === 'b') {
-        collision_flag = false;
-        setTimeout(()=>collision_flag=true,bonusTime);
+    if (e.key === 'b' ) {
+        let count = sessionStorage.getItem("invincible");
+        if(count > 0){
+            collision_flag = false;
+            setTimeout(()=>collision_flag=true,bonusTime);
+            sessionStorage.setItem("invincible",count-1);
+        }
     }
     if(e.key === 'n'){
-        gameSpeed = 0.25;
-        setTimeout(()=>gameSpeed=0.5,bonusTime);
-    }
+        let count = sessionStorage.getItem("slow-down");
+            if(count > 0){
+            gameSpeed = 0.25;
+            setTimeout(()=>gameSpeed=0.5,bonusTime);
+            sessionStorage.setItem("slow-down",count-1);
+    }}
 }
 
 
@@ -165,7 +172,7 @@ function animate() {
             scene.remove(element);
             instances.shift();
         }
-        //Collision(element)
+        Collision(element)
     });
 
     instances_assets.forEach(asset => {
