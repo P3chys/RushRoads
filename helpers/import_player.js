@@ -7,7 +7,7 @@ export function Load_model(scene,x,y,z){
     var loader = new GLTFLoader();
     var mesh = new THREE.Object3D();
         loader.load(
-            './models/car03.glb',
+            'assets/models/car03.glb',
             function ( gltf ) {
                 mesh = gltf.scene
                 var materials = gltf.materials;

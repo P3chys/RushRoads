@@ -41,7 +41,7 @@ export function Load_assets(scene){
     const loader = new GLTFLoader(manager);
 
     // Array of GLB file paths
-    const glbFiles = ['./models/tree.glb', './models/tree2.glb','./models/stone1.glb','./models/stone2.glb'];
+    const glbFiles = ['assets/models/tree.glb', 'assets/models/tree2.glb','assets/models/stone1.glb','assets/models/stone2.glb'];
     
     function loadRandomGLB() {
       const randomIndex = Math.floor(Math.random() * glbFiles.length);

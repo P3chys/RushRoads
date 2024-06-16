@@ -74,7 +74,7 @@ function init_scene() {
     //SETUP VISUAL EFFECTS
     scene.fog = new THREE.Fog(0xaaaaaa, fogNear, fogFar);
 
-    rgbeLoader.load('./models/map.hdr', function (texture) {
+    rgbeLoader.load('assets/hdri/map.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.environment = texture;
         scene.background = texture;

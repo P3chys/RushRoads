@@ -36,7 +36,7 @@ const manager = new THREE.LoadingManager();
     const loader = new GLTFLoader(manager);
 
     // Array of GLB file paths
-    const glbFiles = ['./models/car.glb', './models/car02.glb','./models/car03.glb'];
+    const glbFiles = ['assets/models/car.glb', 'assets/models/car02.glb','assets/models/car03.glb'];
 
     
     function loadRandomGLB() {
