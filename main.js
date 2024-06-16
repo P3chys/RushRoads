@@ -93,7 +93,7 @@ document.onkeydown = function (e) {
 
 //ANIMATION LOOP
 function animate() {
-    otherCars = handleOtherCars(otherCars, scene, gameSpeed, clock, renderer, collision_flag, player, camera);
+    otherCars = handleOtherCars(otherCars, scene, gameSpeed, clock, renderer, collision_flag, player);
     assets = handleAssets(assets, scene);
     TWEEN.update();
     renderer.render(scene, camera);
