@@ -1,0 +1,40 @@
+import * as THREE from 'three';
+
+const roadSizeWidth = 30, raodSizeLength = 2000, roadRotateX = 0.5, roadColorScalar = 1.5;
+const groundSize = 2000;
+const rLane = 30, lLane = -30;
+
+export function initRoads(scene){
+    let ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar) })
+        );
+    let ground2 = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength).rotateX(-Math.PI * roadRotateX), 
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x224488).multiplyScalar(roadColorScalar) })
+        );
+    
+    let ground3 = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength).rotateX(-Math.PI * roadRotateX),
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar) })
+        );
+
+    let groundx = new THREE.Mesh(
+        new THREE.PlaneGeometry(groundSize, groundSize).rotateX(-Math.PI * roadRotateX),
+        new THREE.MeshToonMaterial({ color: 0x136d15 })
+    );
+    ground2.position.x = lLane;
+    ground3.position.x = rLane;
+    groundx.position.z = -1; //so it is below
+
+    scene.add(ground);
+    scene.add(ground2);
+    scene.add(ground3);
+    scene.add(groundx);
+}

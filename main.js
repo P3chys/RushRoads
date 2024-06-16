@@ -1,152 +1,71 @@
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js'
-import { Lights } from './src/utils/init_lights';
-import { Load_model } from './src/utils/import_player';
+import { initLights } from './src/models/lights';
 import { playMusic } from './src/utils/music';
 import { AnimateMovement } from './src/utils/move';
 import { Load_model_X } from './src/utils/import_others';
-import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { Load_assets } from './src/utils/spawn_trees';
+import { initRGBELoader } from './src/models/rgbeLoader';
+import { initRoads } from './src/models/roads';
+import { initCamera } from './src/models/camera';
+import { initScene } from './src/models/scene';
+import { initRenderer } from './src/models/renderer';
+import { initClock } from './src/utils/clock';
+import { initPlayer } from './src/models/player';
+import { handleOtherCars } from './src/utils/carHandler';
+import { handleAssets } from './src/utils/assetHandler';
 
 
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
-var scene, camera, renderer, player, clock, gameSpeed=0.5, collision_flag=true, coins = 0;
-const rLane = 30, lLane = -30, bonusTime = 5000, removeBoundry=200, assetSpeed = 1;
-const cameraFOV = 75, cameraNear = 0.1, cameraFar = 2000;
-const toneMappingExposure = 1.8, fogNear = 650, fogFar = 850;
-const roadSizeWidth = 30, raodSizeLength = 2000, roadRotateX = 0.5, roadColorScalar = 1.5;
-const groundSize = 2000;
+var scene, camera, renderer, player, clock, gameSpeed=0.5;
+var bonusTime = 5000, collision_flag=true;
 const refreshTimeScore = 1000;
-const cameraZ=50, cameraY=20;
+const rLane = 30, lLane = -30;
 
-const rgbeLoader = new RGBELoader();
 
-function init_scene() {
-    //SETUP SCENE AND RENDERER
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(cameraFOV, window.innerWidth / window.innerHeight, cameraNear, cameraFar);
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+
+//INIT SCENE
+function sceneManager() {
+
+    scene = initScene();
+    renderer = initRenderer();
     renderer.setAnimationLoop(animate);
-    document.body.appendChild(renderer.domElement);
-
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = toneMappingExposure;
-
-
-    //INITIATE GROUND GEOMETRY
-    let ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(
-            roadSizeWidth, 
-            raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar) })
-        );
-    let ground2 = new THREE.Mesh(
-        new THREE.PlaneGeometry(
-            roadSizeWidth, 
-            raodSizeLength).rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x224488).multiplyScalar(roadColorScalar) })
-        );
+    camera = initCamera(scene)
     
-    let ground3 = new THREE.Mesh(
-        new THREE.PlaneGeometry(
-            roadSizeWidth, 
-            raodSizeLength).rotateX(-Math.PI * roadRotateX),
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar) })
-        );
+    initLights(scene);
+    initRoads(scene);
+    initRGBELoader(scene);
 
-    let groundx = new THREE.Mesh(
-        new THREE.PlaneGeometry(groundSize, groundSize).rotateX(-Math.PI * roadRotateX),
-        new THREE.MeshToonMaterial({ color: 0x136d15 })
-    );
-    ground2.position.x = lLane;
-    ground3.position.x = rLane;
-    groundx.position.z = -1; //so it is below
-
-    scene.add(ground);
-    scene.add(ground2);
-    scene.add(ground3);
-    scene.add(groundx);
-
-    //SETUP VISUAL EFFECTS
-    scene.fog = new THREE.Fog(0xaaaaaa, fogNear, fogFar);
-
-    rgbeLoader.load('assets/hdri/map.hdr', function (texture) {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        scene.environment = texture;
-        scene.background = texture;
-    });
-
-
-    //SETUP CAMERA
-    camera.position.z = cameraZ;
-    camera.position.y = cameraY;
-
-    //SETUP LIGHTS
-    Lights(scene);
-
-    //SETUP CLOCK
-    clock = new THREE.Clock();
-    clock.getDelta();
+    clock = initClock();
     setInterval(ShowScore, refreshTimeScore);
+    
 
 }
 
+//START COUNTING SCORE
 function ShowScore() {
-    var x = clock.getElapsedTime();
-    document.getElementById("info").innerHTML = "Distance: " + Math.trunc(x);
+    document.getElementById("info").innerHTML = "Distance: " + Math.trunc(clock.getElapsedTime());
 }
 
-function init_player() {
-    player = new THREE.Object3D;
-    player.name = 'player';
-    scene.add(player);
-    Load_model(player);
-}
 
-function gameOver() {
-    if (sessionStorage.getItem("distance_map_1") < clock.getElapsedTime()) {
-        sessionStorage.setItem("distance_map_1", clock.getElapsedTime())
-    }
-    let curCoins = parseInt(sessionStorage.getItem("coins"));
-    sessionStorage.setItem("coins",curCoins+coins);
+//CALL SCENE INIT
+sceneManager();
 
-    clock.stop();
-    renderer.domElement.style.display = 'none';
-    window.location.href = "./menu/menu.html";
-}
+//CREATE PLAYER
+player = initPlayer(scene);
 
-function Collision(element) {
-    if(collision_flag == true){
-    if (player.position.x > rLane || player.position < lLane) {
-        gameOver();
-    }
-    const otherBoundingBox = new THREE.Box3().setFromObject(element)
-    const boundingBox = new THREE.Box3().setFromObject(player)
-    if (boundingBox.intersectsBox(otherBoundingBox)) {
-        if(element.userData.type == "coin"){
-            coins++;
-            scene.remove(element);
-        }else{
-            gameOver();
-        }
-        
-    }
-}
-}
+//CREATE OTHER CARS
+var otherCars = Load_model_X(scene);
 
-init_scene();
-init_player();
+//CREATE ASSETS
+var assets = Load_assets(scene);
 
-var instances = Load_model_X(scene);
-
-var instances_assets = Load_assets(scene);
-
+//MUSIC PLAYER
 playMusic(camera);
 
+//LISTENERS FOR MOVEMENT
 document.onkeydown = function (e) {
     if (e.key === 'd') {
         AnimateMovement(player, rLane);
@@ -171,25 +90,10 @@ document.onkeydown = function (e) {
     }}
 }
 
-
+//ANIMATION LOOP
 function animate() {
-    instances.forEach(element => {
-        console.log(gameSpeed);
-        element.position.z += element.userData.speed*gameSpeed;
-        if (element.position.z > removeBoundry) {
-            scene.remove(element);
-            instances.shift();
-        }
-       Collision(element)
-    });
-
-    instances_assets.forEach(asset => {
-        asset.position.z += assetSpeed;
-        if (asset.position.z > removeBoundry) {
-            scene.remove(asset);
-            instances_assets.shift();
-        }
-    });
+    otherCars = handleOtherCars(otherCars,scene, gameSpeed,clock, renderer, collision_flag, player);
+    assets = handleAssets(assets, scene);
     TWEEN.update();
     renderer.render(scene, camera);
 }
