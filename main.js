@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js'
-import { Lights } from './helpers/init_lights';
-import { Load_model } from './helpers/import_player';
-import { playMusic } from './music';
-import { AnimateMovement } from './move';
-import { Load_model_X } from './helpers/import_others';
+import { Lights } from './src/utils/init_lights';
+import { Load_model } from './src/utils/import_player';
+import { playMusic } from './src/utils/music';
+import { AnimateMovement } from './src/utils/move';
+import { Load_model_X } from './src/utils/import_others';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { Load_assets } from './helpers/spawn_trees';
+import { Load_assets } from './src/utils/spawn_trees';
 
 
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
