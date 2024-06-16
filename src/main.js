@@ -7,21 +7,25 @@ import { AnimateMovement } from './move';
 import { Load_model_X } from './helpers/import_others';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { Load_assets } from './helpers/spawn_trees';
-import { roughness } from 'three/examples/jsm/nodes/Nodes.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-
-
-
 
 
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./menu/menu.html"; }
 
-var scene, camera, renderer, player, score, clock, gameSpeed;
+var scene, camera, renderer, player, clock, gameSpeed=0.5, collision_flag=true;
+const rLane = 30, lLane = -30, bonusTime = 5000, removeBoundry=200, assetSpeed = 1;
+const cameraFOV = 75, cameraNear = 0.1, cameraFar = 2000;
+const toneMappingExposure = 1.8, fogNear = 650, fogFar = 850;
+const roadSizeWidth = 30, raodSizeLength = 2000, roadRotateX = 0.5, roadColorScalar = 1.5;
+const groundSize = 2000;
+const refreshTimeScore = 1000;
+const cameraZ=50, cameraY=20;
+
 const rgbeLoader = new RGBELoader();
 
 function init_scene() {
+    //SETUP SCENE AND RENDERER
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera = new THREE.PerspectiveCamera(cameraFOV, window.innerWidth / window.innerHeight, cameraNear, cameraFar);
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -30,21 +34,45 @@ function init_scene() {
 
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.8;
+    renderer.toneMappingExposure = toneMappingExposure;
 
 
-    let ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(1.5) }));
-    let ground2 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x224488).multiplyScalar(1.5) }));
-    ground2.position.x = -30
-    let ground3 = new THREE.Mesh(new THREE.PlaneGeometry(30, 2000).rotateX(-Math.PI * 0.5), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(1.5) }));
-    ground3.position.x = 30
+    //INITIATE GROUND GEOMETRY
+    let ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar) })
+        );
+    let ground2 = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength).rotateX(-Math.PI * roadRotateX), 
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x224488).multiplyScalar(roadColorScalar) })
+        );
     
+    let ground3 = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            roadSizeWidth, 
+            raodSizeLength).rotateX(-Math.PI * roadRotateX),
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar) })
+        );
+
+    let groundx = new THREE.Mesh(
+        new THREE.PlaneGeometry(groundSize, groundSize).rotateX(-Math.PI * roadRotateX),
+        new THREE.MeshToonMaterial({ color: 0x136d15 })
+    );
+    ground2.position.x = lLane;
+    ground3.position.x = rLane;
+    groundx.position.z = -1; //so it is below
+
     scene.add(ground);
     scene.add(ground2);
     scene.add(ground3);
-    
-    scene.fog = new THREE.Fog( 0xaaaaaa, 650, 850 );
-    //new THREE.TextGeometry( text, "hello" );
+    scene.add(groundx);
+
+    //SETUP VISUAL EFFECTS
+    scene.fog = new THREE.Fog(0xaaaaaa, fogNear, fogFar);
 
     rgbeLoader.load('./models/map.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -53,34 +81,30 @@ function init_scene() {
     });
 
 
-    let groundx = new THREE.Mesh(
-        new THREE.PlaneGeometry(2000, 2000).rotateX(-Math.PI * 0.5),
-        new THREE.MeshToonMaterial({color: 0x136d15, roughness: 10,})
-    );
-    groundx.position.z = -1
+    //SETUP CAMERA
+    camera.position.z = cameraZ;
+    camera.position.y = cameraY;
 
-    scene.add(groundx);
-
-    camera.position.z = 50;
-    camera.position.y = 20;
-
+    //SETUP LIGHTS
     Lights(scene);
 
+    //SETUP CLOCK
     clock = new THREE.Clock();
     clock.getDelta();
-    setInterval(ShowScore, 1000);
+    setInterval(ShowScore, refreshTimeScore);
+
 }
 
-function ShowScore(){
+function ShowScore() {
     var x = clock.getElapsedTime();
-    document.getElementById("info").innerHTML = "Distance: "+Math.trunc(x);
+    document.getElementById("info").innerHTML = "Distance: " + Math.trunc(x);
 }
 
 function init_player() {
     player = new THREE.Object3D;
     player.name = 'player';
     scene.add(player);
-    Load_model(player, 0, 4, 0);
+    Load_model(player);
 }
 
 function gameOver() {
@@ -93,16 +117,17 @@ function gameOver() {
 }
 
 function Collision(element) {
-    if (player.position.x > 5 || player.position < -5) {
-        //console.log("crash outside map");
+    if(collision_flag == true){
+    if (player.position.x > rLane || player.position < lLane) {
+        gameOver();
     }
 
     const otherBoundingBox = new THREE.Box3().setFromObject(element)
     const boundingBox = new THREE.Box3().setFromObject(player)
     if (boundingBox.intersectsBox(otherBoundingBox)) {
-        //console.log("HIT");
         gameOver();
     }
+}
 }
 
 init_scene();
@@ -110,37 +135,42 @@ init_player();
 
 var instances = Load_model_X(scene);
 
-var instances_assets = Load_assets(scene, 0, 0, 0);
+var instances_assets = Load_assets(scene);
 
 playMusic(camera);
 
 document.onkeydown = function (e) {
     if (e.key === 'd') {
-        AnimateMovement(player, 30);
+        AnimateMovement(player, rLane);
     }
     if (e.key === 'a') {
-        AnimateMovement(player, -30);
+        AnimateMovement(player, lLane);
+    }
+    if (e.key === 'b') {
+        collision_flag = false;
+        setTimeout(()=>collision_flag=true,bonusTime);
+    }
+    if(e.key === 'n'){
+        gameSpeed = 0.25;
+        setTimeout(()=>gameSpeed=0.5,bonusTime);
     }
 }
-
-gameSpeed = 0.2;
-
-
 
 
 function animate() {
     instances.forEach(element => {
-        element.position.z += 0.5 * element.userData.speed;
-        if (element.position.z > 200) {
+        console.log(gameSpeed);
+        element.position.z += element.userData.speed*gameSpeed;
+        if (element.position.z > removeBoundry) {
             scene.remove(element);
             instances.shift();
         }
         //Collision(element)
     });
 
-    instances_assets.forEach(asset =>{
-        asset.position.z += 1;
-        if (asset.position.z > 200) {
+    instances_assets.forEach(asset => {
+        asset.position.z += assetSpeed;
+        if (asset.position.z > removeBoundry) {
             scene.remove(asset);
             instances_assets.shift();
         }
@@ -149,23 +179,3 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-//DONE:
-    //ADD Player stats (owned items, cars, coins, distance per map)
-
-    //ADD handle distance, coins at endgame
-
-//CREATE items and item control handle
-
-//CREATE shop menu
-
-//CREATE screen for model change
-
-//ADD models
-
-//CREATE level desings
-
-//ADD level branching from menu
-
-//Randomize level spawning cars
-
-//ADD music
