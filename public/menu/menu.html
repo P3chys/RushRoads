@@ -19,6 +19,7 @@
     </div>
 
     <div class="menu-container" id="level-select" style="display: none;">
+        <a href="menu.html" class="back-button">Back</a>
         <h1>Select Level</h1>
         <button class="menu-button" id="level-1" onclick="selectLevel(1)">Level 1 <span
                 class="map-distance"></span></button>
@@ -61,7 +62,7 @@
         }
 
         function changeCarModel() {
-            window.location.href = "./car_change.html"
+            window.location.href = "./car_selection.html"
         }
 
         function selectLevel(level) {
@@ -77,9 +78,9 @@
                 sessionStorage.getItem('distance_map_3')
             ];
 
-            document.getElementById('level-1').querySelector('.map-distance').innerText = `${distances[0]}m`;
-            document.getElementById('level-2').querySelector('.map-distance').innerText = `${distances[1]}m`;
-            document.getElementById('level-3').querySelector('.map-distance').innerText = `${distances[2]}m`;
+            document.getElementById('level-1').querySelector('.map-distance').innerText = `${Math.trunc(distances[0])}m`;
+            document.getElementById('level-2').querySelector('.map-distance').innerText = `${Math.trunc(distances[1])}m`;
+            document.getElementById('level-3').querySelector('.map-distance').innerText = `${Math.trunc(distances[2])}m`;
         }
 
         function checkMapLocks() {

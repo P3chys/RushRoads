@@ -8,7 +8,23 @@ body {
     background: linear-gradient(135deg, #2c3e50, #bdc3c7);
     font-family: 'Roboto', sans-serif;
 }
+.back-button {
 
+    top: 20px;
+    left: 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
 .menu-container {
     text-align: center;
     background: rgba(0, 0, 0, 0.7);

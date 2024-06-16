@@ -25,8 +25,6 @@ const refreshTimeScore = 1000;
 const rLane = 30, lLane = -30;
 
 
-
-
 //INIT SCENE
 function sceneManager() {
 

@@ -1,6 +1,9 @@
+import { getCurrentMap } from "./currentSettingHandler";
+
 export function gameOver(coins, clock, renderer) {
-    if (sessionStorage.getItem("distance_map_1") < clock.getElapsedTime()) {
-        sessionStorage.setItem("distance_map_1", clock.getElapsedTime())
+    let map_val = getCurrentMap()
+    if (sessionStorage.getItem("distance_map_"+map_val) < clock.getElapsedTime()) {
+        sessionStorage.setItem("distance_map_"+map_val, clock.getElapsedTime())
     }
     let curCoins = parseInt(sessionStorage.getItem("coins"));
     sessionStorage.setItem("coins",curCoins+coins);
