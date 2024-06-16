@@ -8,7 +8,9 @@ export function gameOver(coins, clock, renderer) {
     let curCoins = parseInt(sessionStorage.getItem("coins"));
     sessionStorage.setItem("coins",curCoins+coins);
 
+    sessionStorage.setItem("lastDistance",parseInt(clock.getElapsedTime()));
+    sessionStorage.setItem("collectedCoins",parseInt(coins));
     clock.stop();
     renderer.domElement.style.display = 'none';
-    window.location.href = "./menu/menu.html";
+    window.location.href = "./menu/gameOver.html";
 }
