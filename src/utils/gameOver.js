@@ -1,11 +1,12 @@
 import { getCurrentMap } from "./currentSettingHandler";
 import { playMusic} from "./music";
 
-export function gameOver(coins, clock, renderer, camera) {
+export function gameOver(coins, clock, renderer) {
     let map_val = getCurrentMap()
     if (sessionStorage.getItem("distance_map_"+map_val) < clock.getElapsedTime()) {
         sessionStorage.setItem("distance_map_"+map_val, clock.getElapsedTime())
-    }
+    }  
+    coins = Math.trunc(coins/5)
     let curCoins = parseInt(sessionStorage.getItem("coins"));
     sessionStorage.setItem("coins",curCoins+coins);
 
