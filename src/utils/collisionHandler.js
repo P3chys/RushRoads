@@ -4,7 +4,7 @@ import * as THREE from 'three';
 const rLane = 30, lLane = -30;
 var coins = 0;
 
-export function collision(element, clock, renderer, collision_flag, scene, player) {
+export function collision(element, clock, renderer, collision_flag, scene, player, camera) {
     if(collision_flag == true){
     if (player.position.x > rLane || player.position.x < lLane) {
         gameOver(coins,clock,renderer);
@@ -16,7 +16,7 @@ export function collision(element, clock, renderer, collision_flag, scene, playe
             coins++;
             scene.remove(element);
         }else{
-            gameOver(coins,clock,renderer);
+            gameOver(coins,clock,renderer, camera);
         }
         
     }

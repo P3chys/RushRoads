@@ -23,7 +23,7 @@ var scene, camera, renderer, player, clock, gameSpeed = 0.5;
 var bonusTime = 5000, collision_flag = true;
 const refreshTimeScore = 1000;
 const rLane = 30, lLane = -30;
-
+var music = ["001","003"];
 
 //INIT SCENE
 function sceneManager() {
@@ -61,8 +61,9 @@ var otherCars = loadOtherCars(scene);
 //CREATE ASSETS
 var assets = loadAssets(scene);
 
-//MUSIC PLAYER
-playMusic(camera);
+
+
+playMusic(music[Math.floor(Math.random() * 2)],camera);
 
 //LISTENERS FOR MOVEMENT
 document.onkeydown = function (e) {
@@ -92,7 +93,7 @@ document.onkeydown = function (e) {
 
 //ANIMATION LOOP
 function animate() {
-    otherCars = handleOtherCars(otherCars, scene, gameSpeed, clock, renderer, collision_flag, player);
+    otherCars = handleOtherCars(otherCars, scene, gameSpeed, clock, renderer, collision_flag, player, camera);
     assets = handleAssets(assets, scene);
     TWEEN.update();
     renderer.render(scene, camera);

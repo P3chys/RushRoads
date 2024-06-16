@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function playMusic(camera){
+export function playMusic(sample,camera){
     const listener = new THREE.AudioListener();
     camera.add( listener );
     
@@ -9,10 +9,10 @@ export function playMusic(camera){
     
     // load a sound and set it as the Audio object's buffer
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( './001.mp3', function( buffer ) {
+    audioLoader.load( '/assets/music/'+sample+'.mp3', function( buffer ) {
         sound.setBuffer( buffer );
         sound.setLoop( true );
-        sound.setVolume( 0.3 );
+        sound.setVolume( 0.5 );
         sound.play();
     });
 }
