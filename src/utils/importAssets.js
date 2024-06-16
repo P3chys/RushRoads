@@ -1,41 +1,29 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const minAssetWidth = -700, maxAssetWidth = 700, excludedMin = -50, excludedMax=50, spawnerFrequency = 200;
+const assetScale = 12, assetPositionZ = -1, assetPositionX=-800, assetRotationY=100, assetRotationZ=0.1;
+
+
 function getRandomNumber() {
-    // Helper function to generate a random number within a specific range
+
     function getRandomInRange(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   
     let randomNumber;
     do {
-      randomNumber = getRandomInRange(-700, 700);
-    } while (randomNumber >= -50 && randomNumber <= 50);
+      randomNumber = getRandomInRange(minAssetWidth, maxAssetWidth);
+    } while (randomNumber >= excludedMin && randomNumber <= excludedMax);
   
     return randomNumber;
   }
 
 
-export function Load_assets(scene){
-  setInterval(loadRandomGLB, 200);
+export function loadAssets(scene){
+  setInterval(loadRandomGLB, spawnerFrequency);
   var models=[];
   const manager = new THREE.LoadingManager();
-    
-    // Functions to handle the loading process
-    manager.onStart = function (url, itemsLoaded, itemsTotal) {
-        //console.log('Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
-    };
-
-    manager.onLoad = function () {
-        //console.log('Loading complete!');
-    };
-
-    manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        //console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
-    };
-
-    manager.onError = function (url) {
-       // console.log('There was an error loading ' + url);
-    };
 
     // GLTFLoader instance with the manager
     const loader = new GLTFLoader(manager);
@@ -49,17 +37,17 @@ export function Load_assets(scene){
 
       loader.load(selectedFile, function (gltf) {
           const model = gltf.scene;
-          model.scale.x=12;
-          model.scale.y=12;
-          model.scale.z=12;
+          model.scale.x=assetScale;
+          model.scale.y=assetScale;
+          model.scale.z=assetScale;
                 
                 const modelInstance = model.clone();
                 modelInstance.frustumCulled = true;
                 modelInstance.castShadow = true;
                 const randomNum = getRandomNumber();
-                modelInstance.position.set( randomNum,-1,-800);
-                modelInstance.rotateY(-Math.PI * Math.random() *(100));
-                modelInstance.rotateZ(-Math.PI * Math.random() *(0.1));
+                modelInstance.position.set( randomNum,assetPositionZ,assetPositionX);
+                modelInstance.rotateY(-Math.PI * Math.random() *(assetRotationY));
+                modelInstance.rotateZ(-Math.PI * Math.random() *(assetRotationZ));
                 
                 models.push(modelInstance);
                 scene.add(modelInstance);

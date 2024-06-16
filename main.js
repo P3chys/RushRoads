@@ -3,8 +3,8 @@ import * as TWEEN from '@tweenjs/tween.js'
 import { initLights } from './src/models/lights';
 import { playMusic } from './src/utils/music';
 import { AnimateMovement } from './src/utils/move';
-import { Load_model_X } from './src/utils/import_others';
-import { Load_assets } from './src/utils/spawn_trees';
+import { loadOtherCars} from './src/utils/importOtherCars';
+import { loadAssets } from './src/utils/importAssets';
 import { initRGBELoader } from './src/models/rgbeLoader';
 import { initRoads } from './src/models/roads';
 import { initCamera } from './src/models/camera';
@@ -16,6 +16,7 @@ import { handleOtherCars } from './src/utils/carHandler';
 import { handleAssets } from './src/utils/assetHandler';
 
 
+//CHECK IF NOT DIRECT GAME INIT
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
 var scene, camera, renderer, player, clock, gameSpeed=0.5;
@@ -57,10 +58,10 @@ sceneManager();
 player = initPlayer(scene);
 
 //CREATE OTHER CARS
-var otherCars = Load_model_X(scene);
+var otherCars = loadOtherCars(scene);
 
 //CREATE ASSETS
-var assets = Load_assets(scene);
+var assets = loadAssets(scene);
 
 //MUSIC PLAYER
 playMusic(camera);
