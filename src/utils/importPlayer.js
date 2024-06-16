@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { getCurrentCar } from './currentSettingHandler';
 
 
 
@@ -7,7 +8,7 @@ export function Load_model(scene) {
     var loader = new GLTFLoader();
     var mesh = new THREE.Object3D();
     var assetToLoad;
-    var param = parseInt(sessionStorage.getItem("currentCar"));
+    var param = getCurrentCar();
     console.log(param);
     switch (param) {
         case 1:

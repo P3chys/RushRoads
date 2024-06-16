@@ -48,8 +48,8 @@ function sceneManager() {
 //START COUNTING SCORE
 function ShowScore() {
     document.getElementById("info").innerHTML = "Distance: " + Math.trunc(clock.getElapsedTime());
+    document.getElementById("consumables").innerHTML = "Invincibility: " + sessionStorage.getItem("invincible") + " / Slow-down: " + sessionStorage.getItem("slow-down");
 }
-
 
 //CALL SCENE INIT
 sceneManager();
