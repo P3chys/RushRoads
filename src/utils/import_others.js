@@ -45,11 +45,14 @@ const manager = new THREE.LoadingManager();
 
         loader.load(selectedFile, function (gltf) {
             const model = gltf.scene;
+            
             if(model.children.length == 1){
                 model.scale.x = 8;
                 model.scale.z = 8;
                 model.scale.y = 8;
                 model.userData.type = "coin";
+                model.userData.animation = gltf.animations[0];
+                
             }else{
                 model.scale.x = 4;
                 model.scale.z = 4;

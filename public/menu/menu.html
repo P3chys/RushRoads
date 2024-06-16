@@ -60,8 +60,7 @@
         }
 
         function changeCarModel() {
-            alert("Changing car model...");
-            // Add your car model change logic here
+            window.location.href = "./car_change.html"
         }
 
         function selectLevel(level) {
@@ -83,8 +82,8 @@
         }
 
         function checkMapLocks() {
-            const map2Locked = sessionStorage.getItem('map_2') === 'false';
-            const map3Locked = sessionStorage.getItem('map_3') === 'false';
+            const map2Locked = sessionStorage.getItem('map2') === 'false';
+            const map3Locked = sessionStorage.getItem('map3') === 'false';
 
             if (map2Locked) {
                 lockMap('level-2');
