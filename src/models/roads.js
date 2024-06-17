@@ -14,7 +14,7 @@ export function initRoads(scene){
         new THREE.PlaneGeometry(
             roadSizeWidth, 
             raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar), refractionRatio:0.5 })
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar)})
         );
     let ground2 = new THREE.Mesh(
         new THREE.PlaneGeometry(
@@ -29,6 +29,7 @@ export function initRoads(scene){
             raodSizeLength).rotateX(-Math.PI * roadRotateX),
             new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar) })
         );
+        
     if(parseInt(getCurrentMap())==1){
         groundColor = new THREE.MeshToonMaterial({color: 0x136d15})
     }   
