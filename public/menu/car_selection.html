@@ -63,7 +63,6 @@
             justify-content: space-around;
             margin-top: 20px;
         }
-
         .car-selection img {
             width: 200px;
             height: auto;
@@ -76,19 +75,25 @@
         .car-selection img.selected {
             border: 5px solid #f39c12;
         }
+
+        .car-selection img.disabled {
+            filter: grayscale(100%);
+            cursor: not-allowed;
+        }
+
+
     </style>
 </head>
 <body>
-    
     <div class="menu">
         <h1>Select Your Car</h1>
         <div class="car-selection">
-            <img src="../assets/pictures/untitled.png" alt="Car 1" data-car="1">
-            <img src="../assets/pictures/untitled2.png" alt="Car 2" data-car="2">
-            <img src="../assets/pictures/untitled3.png" alt="Car 3" data-car="3">
+            <img src="../assets/pictures/untitled.png" alt="Car 1" data-car="1" id="car1">
+            <img src="../assets/pictures/untitled2.png" alt="Car 2" data-car="2" id="car2">
+            <img src="../assets/pictures/untitled3.png" alt="Car 3" data-car="3" id="car3">
         </div>
     </div>
-    <a href="menu.html" class="confirm-button">Confirm</a>
+    <a href="menu.html" class="confirm-button disabled">Confirm</a>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -96,13 +101,20 @@
             const confirmButton = document.querySelector('.confirm-button');
 
             carImages.forEach(img => {
-                img.addEventListener('click', () => {
-                    carImages.forEach(car => car.classList.remove('selected'));
-                    img.classList.add('selected');
-                    const selectedCar = img.getAttribute('data-car');
-                    sessionStorage.setItem('currentCar', selectedCar);
-                    confirmButton.classList.add('enabled');
-                });
+                const carId = img.getAttribute('data-car');
+                
+                const carAvailable = sessionStorage.getItem('car' + carId);
+                console.log(carAvailable);
+                if (carAvailable !== 'true') {
+                        img.classList.add('disabled');
+                } else {
+                    img.addEventListener('click', () => {
+                        carImages.forEach(car => car.classList.remove('selected'));
+                        img.classList.add('selected');
+                        sessionStorage.setItem('currentCar', carId);
+                        confirmButton.classList.add('enabled');
+                    });
+                }
             });
         });
     </script>

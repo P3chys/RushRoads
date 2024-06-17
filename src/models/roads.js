@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { getCurrentMap } from '../utils/currentSettingHandler';
-import vertex_shader from '../../public/assets/vertex_shader';
-import fragmentShader from '../../public/assets/fragment_shader';
+import vertex_shader from '../../public/assets/shaders/vertex_shader';
+import fragmentShader from '../../public/assets/shaders/fragment_shader';
 
 const roadSizeWidth = 30, raodSizeLength = 2000, roadRotateX = 0.5, roadColorScalar = 1.5;
 const groundSize = 2000;

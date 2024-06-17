@@ -62,6 +62,9 @@
         }
 
         function changeCarModel() {
+            if(sessionStorage.getItem("user_exists")===null){
+                startNewGame();
+            }
             window.location.href = "./car_selection.html"
         }
 
