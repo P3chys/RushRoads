@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 
-const toneMappingExposure = 1.8;
+const toneMappingExposure = 0.5;
 
 export function initRenderer(){
    let renderer = new THREE.WebGLRenderer();
@@ -10,7 +10,7 @@ export function initRenderer(){
     document.body.appendChild(renderer.domElement);
     
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMapping = THREE.CineonToneMapping;
     renderer.toneMappingExposure = toneMappingExposure;
     return renderer;
 }

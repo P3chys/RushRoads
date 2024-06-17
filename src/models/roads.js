@@ -14,24 +14,24 @@ export function initRoads(scene){
         new THREE.PlaneGeometry(
             roadSizeWidth, 
             raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar)})
+            new THREE.MeshLambertMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar),emissive:0x442288,emissiveIntensity:7})
         );
     let ground2 = new THREE.Mesh(
         new THREE.PlaneGeometry(
             roadSizeWidth, 
             raodSizeLength).rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x224488).multiplyScalar(roadColorScalar) })
+            new THREE.MeshLambertMaterial({ color: new THREE.Color(0x224488), emissive:0x224488,emissiveIntensity:7 })
         );
     
     let ground3 = new THREE.Mesh(
         new THREE.PlaneGeometry(
             roadSizeWidth, 
             raodSizeLength).rotateX(-Math.PI * roadRotateX),
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar) })
+            new THREE.MeshLambertMaterial({ color: new THREE.Color(0x444422).multiplyScalar(roadColorScalar),emissive:0x444422,emissiveIntensity:7 })
         );
-        
+
     if(parseInt(getCurrentMap())==1){
-        groundColor = new THREE.MeshToonMaterial({color: 0x136d15})
+        groundColor = new THREE.MeshLambertMaterial({color: 0x136d15,emissive:0x136d15,emissiveIntensity:1})
     }   
     if(parseInt(getCurrentMap())==2){
         groundColor = new THREE.MeshToonMaterial({color: 0x5f5f5f})
