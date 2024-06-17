@@ -20,7 +20,7 @@ import { handleAssets } from './src/utils/assetHandler';
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
 var scene, camera, renderer, player, clock, gameSpeed = 0.5;
-var bonusTime = 5000, collision_flag = false;
+var bonusTime = 5000, collision_flag = true;
 const refreshTimeScore = 1000;
 const rLane = 30, lLane = -30;
 var music = ["001","003"];
