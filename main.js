@@ -20,7 +20,7 @@ import { handleAssets } from './src/utils/assetHandler';
 if (sessionStorage.getItem("user_exists") === null) { window.location.href = "./public/menu/menu.html"; }
 
 var scene, camera, renderer, player, clock, gameSpeed = 0.5;
-var bonusTime = 5000, collision_flag = true;
+var bonusTime = 5000, collision_flag = false;
 const refreshTimeScore = 1000;
 const rLane = 30, lLane = -30;
 var music = ["001","003"];
@@ -62,16 +62,17 @@ var otherCars = loadOtherCars(scene);
 var assets = loadAssets(scene);
 
 
-
 playMusic(music[Math.floor(Math.random() * 2)],camera);
 
 //LISTENERS FOR MOVEMENT
 document.onkeydown = function (e) {
     if (e.key === 'd' || e.key === 'D') {
         AnimateMovement(player, rLane);
+        AnimateMovement(camera, rLane);
     }
     if (e.key === 'a' || e.key === 'A') {
         AnimateMovement(player, lLane);
+        AnimateMovement(camera, lLane);
     }
     if (e.key === 'b' || e.key === 'B') {
         let count = sessionStorage.getItem("invincible");
