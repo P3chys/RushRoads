@@ -22,10 +22,11 @@ export function initLights(scene){
         
 
         if(getCurrentMap() == 1){
-       const spotLight = new THREE.SpotLight(0xff0000);
-       spotLight.position.set( 30, 0, -100 );
+       const spotLight = new THREE.SpotLight(0xffffff);
+       spotLight.position.set( 0, 1200, -100 );
        spotLight.castShadow = true;
-       spotLight.intensity =10000;
+       spotLight.intensity =2000000;
+       spotLight.lookAt(0,0,0);
 
        spotLight.shadow.mapSize.width = 1024;
        spotLight.shadow.mapSize.height = 1024;

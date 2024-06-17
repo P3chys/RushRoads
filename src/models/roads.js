@@ -31,7 +31,7 @@ export function initRoads(scene){
         );
 
     if(parseInt(getCurrentMap())==1){
-        groundColor = new THREE.MeshLambertMaterial({color: 0x136d15,emissive:0x136d15,emissiveIntensity:1})
+        groundColor = new THREE.MeshToonMaterial({color: 0x136d15})
     }   
     if(parseInt(getCurrentMap())==2){
         groundColor = new THREE.MeshToonMaterial({color: 0x5f5f5f})
@@ -52,7 +52,7 @@ export function initRoads(scene){
     ground3.position.x = rLane;
 
     groundx.position.y = -2; //so it is below
-
+    groundx.receiveShadow = true;
     scene.add(ground);
     scene.add(ground2);
     scene.add(ground3);

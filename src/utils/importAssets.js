@@ -57,6 +57,11 @@ export function loadAssets(scene) {
     const selectedFile = glbFiles[randomIndex];
 
     loader.load(selectedFile, function (gltf) {
+        gltf.scene.traverse( function( node ) {
+
+            if ( node.isMesh ) { node.castShadow = true; }
+    
+        } );
       const model = gltf.scene;
         model.scale.x = assetScale;
         model.scale.y = assetScale;

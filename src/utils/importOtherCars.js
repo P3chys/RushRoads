@@ -37,6 +37,7 @@ export function loadOtherCars(scene) {
         const selectedFile = glbFiles[randomIndex];
 
         loader.load(selectedFile, function (gltf) {
+            
             const model = gltf.scene;
 
             //IS A COIN
