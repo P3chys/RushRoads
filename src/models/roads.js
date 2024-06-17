@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { getCurrentCar, getCurrentMap } from '../utils/currentSettingHandler';
+import { getCurrentMap } from '../utils/currentSettingHandler';
+import vertex_shader from '../../public/assets/vertex_shader';
+import fragmentShader from '../../public/assets/fragment_shader';
 
 const roadSizeWidth = 30, raodSizeLength = 2000, roadRotateX = 0.5, roadColorScalar = 1.5;
 const groundSize = 2000;
@@ -12,7 +14,7 @@ export function initRoads(scene){
         new THREE.PlaneGeometry(
             roadSizeWidth, 
             raodSizeLength) .rotateX(-Math.PI * roadRotateX), 
-            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar) })
+            new THREE.MeshBasicMaterial({ color: new THREE.Color(0x442288).multiplyScalar(roadColorScalar), refractionRatio:0.5 })
         );
     let ground2 = new THREE.Mesh(
         new THREE.PlaneGeometry(
@@ -34,16 +36,20 @@ export function initRoads(scene){
         groundColor = new THREE.MeshToonMaterial({color: 0x5f5f5f})
     } 
     if(parseInt(getCurrentMap())==3){
-        groundColor = new THREE.MeshToonMaterial({color: 0x0e87cc})
+        groundColor = new THREE.ShaderMaterial( {
+              vertexShader: vertex_shader,
+              fragmentShader:fragmentShader,
+        } );
     }   
     
     let groundx = new THREE.Mesh(
         new THREE.PlaneGeometry(groundSize, groundSize).rotateX(-Math.PI * roadRotateX),
-        groundColor
+        groundColor,
     );
     
     ground2.position.x = lLane;
     ground3.position.x = rLane;
+
     groundx.position.y = -2; //so it is below
 
     scene.add(ground);

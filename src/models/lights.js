@@ -2,11 +2,11 @@ import * as THREE from 'three';
 
 export function initLights(scene){
         // Ambient Light
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // soft white light
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.3); // soft white light
         scene.add(ambientLight);
 
         // Directional Light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.3);
         directionalLight.position.set(5, 10, 7.5);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
